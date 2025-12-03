@@ -7,4 +7,6 @@ launchSpeed = 5
 launchHeight = 0.2
 launchTime = 1.5
 launchDist = 3
-%% Launch/Climb
+
+
+%% Cruise
