@@ -1,4 +1,4 @@
-% Variables
+%% Variables
 Mass = 135
 wingArea = 0.1066667
 aspectRatio = 6
