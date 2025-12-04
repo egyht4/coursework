@@ -25,9 +25,11 @@ Drag = -1*0.5*AirDensity*launchSpeed^2*wingArea*CD;
 Weight = Mass*9.81;
 StartAngle = 0;
 ClimbAngle = asind(Tension/Weight-CD/CL);
+
 %% resolve forces
 Fx = Tension+Drag;      % horizontal force (N)
-Fy = Lift-Weight;      % vertical force (N)
+Fy = Lift-Weight; % vertical force (N)
+
 %% make graph
 figure; hold on; grid on; axis equal;
 xlim([0 7]); ylim([0 2]);
@@ -35,19 +37,23 @@ xlim([0 7]); ylim([0 2]);
 %% Calculate acceleration
 accelerationX = Fx / Mass;  % horizontal acceleration (m/s^2)
 accelerationY = Fy / Mass; % vertical acceleration (m/s^2)
+
 %% intergrate conponents of axceleraton with respect to time to get velocity
 %starting velocity x=5 y=0
 time = 0;
 VelocityX = accelerationX * 0.1 + launchSpeed; % horixzontal velocity
 VelocityY = accelerationY * 0.1 + 0; % vertical velocity (m/s)
+
 %% intergrate conponents of velocity with respect to time to get displacement
 %starting position x=0 y=0.2
 displacementX = VelocityX * 0.1 + 0; % horizontal displacement
 displacementY = VelocityY * 0.1 + launchHeight; % vertical displacement
 plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
     drawnow;
+
 %% repeat
 for k = 1:15
+
     % update forces based new position
     time = time + 0.1;
 WinchLength = StartingWinchLength-launchSpeed*time;
@@ -66,17 +72,20 @@ LiftX = -1*Lift*sind(ClimbAngle);
 LiftY = Lift*cosd(ClimbAngle);
 Fx = TensionX+Drag+LiftX  ;    % horizontal force (N)
 Fy = LiftY-Weight-TensionY ;     % vertical force (N)
+
 %% Calculate acceleration
 accelerationX = Fx / Mass;  % horizontal acceleration (m/s^2)
 accelerationY = Fy / Mass; % vertical acceleration (m/s^2)
+
 %% intergrate conponents of axceleraton with respect to time to get velocity
 VelocityX = accelerationX * 0.1 + VelocityX; % horixzontal velocity
 VelocityY = accelerationY * 0.1 + VelocityY; % vertical velocity (m/s)
+
 %% intergrate conponents of velocity with respect to time to get displacement
 %starting position x=0 y=0.2
 displacementX = VelocityX * 0.1 + displacementX; % horizontal displacement
 displacementY = VelocityY * 0.1 + displacementY; % vertical displacement
     plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
     drawnow;
+    
 end
-hold off;
