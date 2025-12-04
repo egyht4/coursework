@@ -1,5 +1,5 @@
 %% Variables 
-Mass = 0.100; 
+Mass = 0.09191; 
 wingArea = 0.1066667; 
 aspectRatio = 6; 
 oswaldEff = 0.95; 
@@ -7,7 +7,7 @@ launchSpeed = 5;
 launchHeight = 0.2; 
 launchTime = 1.5; 
 launchDist = 3; 
-time = 0.25
+time = 0
 StartingWinchLength = 20; 
 WinchLength = StartingWinchLength-launchSpeed*time;
 AirDensity = 1.225; 
@@ -33,8 +33,8 @@ figure; hold on; grid on; axis equal;
 xlim([-10 10]); ylim([-10 10]);
 
 %% Calculate acceleration
-accelerationX = Fx / Mass;  % horizontal acceleration (m/s^2)
-accelerationY = Fy / Mass; % vertical acceleration (m/s^2)
+accelerationX = Fx / Mass  % horizontal acceleration (m/s^2)
+accelerationY = Fy / Mass % vertical acceleration (m/s^2)
 %% intergrate conponents of axceleraton with respect to time to get velocity
 %starting velocity x=5 y=0
 time = 0;
@@ -44,12 +44,12 @@ VelocityY = accelerationY * time + 0; % vertical velocity (m/s)
 %starting position x=0 y=0.2
 displacementX = 0.5 * accelerationX * time^2 + 0 % horizontal displacement
 displacementY = 0.5 * accelerationY * time^2 + launchHeight % vertical displacement
-time = 0.25;
 plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
     drawnow;
 %% repeat
 for k = 1:6
     % update forces based new position
+    time = time + 0.25
 WinchLength = StartingWinchLength-launchSpeed*time;
 Tension = (Mass*launchSpeed^2)/WinchLength;
 winchangle = asind(displacementX/WinchLength);
@@ -67,8 +67,8 @@ LiftY = Lift*cos(ClimbAngle);
 Fx = TensionX+Drag+LiftX;      % horizontal force (N)
 Fy = LiftY+Weight+TensionY;      % vertical force (N)
 %% Calculate acceleration
-accelerationX = Fx / Mass;  % horizontal acceleration (m/s^2)
-accelerationY = Fy / Mass; % vertical acceleration (m/s^2)
+accelerationX = Fx / Mass  % horizontal acceleration (m/s^2)
+accelerationY = Fy / Mass % vertical acceleration (m/s^2)
 %% intergrate conponents of axceleraton with respect to time to get velocity
 VelocityX = accelerationX * time + VelocityX; % horixzontal velocity
 VelocityY = accelerationY * time + VelocityY; % vertical velocity (m/s)
@@ -76,7 +76,7 @@ VelocityY = accelerationY * time + VelocityY; % vertical velocity (m/s)
 %starting position x=0 y=0.2
 displacementX = 0.5 * accelerationX * time^2 + displacementX % horizontal displacement
 displacementY = 0.5 * accelerationY * time^2 + displacementY % vertical displacement
-time = time + 0.25;
+time = time + 0.25
     plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
     drawnow;
 end
