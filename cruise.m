@@ -11,7 +11,7 @@
 %   4) Plots the predicted glide path (height vs horizontal distance)
 
 %% Variables
-Mass = 0.92;
+Mass = 0.107;
 wingArea = 0.1066667;
 aspectRatio = 6;
 oswaldEff = 0.95;
