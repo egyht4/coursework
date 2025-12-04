@@ -1,5 +1,5 @@
 %% Variables
-Mass = 135
+Mass = 0.092
 wingArea = 0.1066667
 aspectRatio = 6
 oswaldEff = 0.95
@@ -9,4 +9,6 @@ launchTime = 1.5
 launchDist = 3
 
 
-%% Cruise
+
+%% 0s 
+
