@@ -100,3 +100,15 @@ fprintf('  V_glide (design)   = %.2f m/s\n', V_design);
 fprintf('  Glide range        = %.2f m\n', glideRange_design);
 fprintf('  Total range        = %.2f m\n', totalRange_design);
 fprintf('  Glide time         = %.2f s\n', glideTime_design);
+
+%% Graphing 
+
+x_points = [releaseDist, releaseDist + glideRange];
+h_points = [releaseHeight, 0];
+
+figure;
+plot(x_points, h_points, '-o');   % straight line + markers
+xlabel('Horizontal distance x [m]');
+ylabel('Height h [m]');
+title('Glide trajectory (from winch release to landing)');
+grid on;
