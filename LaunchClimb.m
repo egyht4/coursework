@@ -1,5 +1,5 @@
 %% Variables 
-Mass = 0.09191; 
+Mass = 0.107; 
 wingArea = 0.1066667; 
 aspectRatio = 6; 
 oswaldEff = 0.95; 
@@ -30,31 +30,31 @@ Fx = Tension+Drag;      % horizontal force (N)
 Fy = Lift+Weight;      % vertical force (N)
 %% make graph
 figure; hold on; grid on; axis equal;
-xlim([-10 10]); ylim([-10 10]);
+xlim([0 10]); ylim([0 10]);
 
 %% Calculate acceleration
-accelerationX = Fx / Mass  % horizontal acceleration (m/s^2)
-accelerationY = Fy / Mass % vertical acceleration (m/s^2)
+accelerationX = Fx / Mass;  % horizontal acceleration (m/s^2)
+accelerationY = Fy / Mass; % vertical acceleration (m/s^2)
 %% intergrate conponents of axceleraton with respect to time to get velocity
 %starting velocity x=5 y=0
 time = 0;
-VelocityX = accelerationX * time + InitialSpeed; % horixzontal velocity
-VelocityY = accelerationY * time + 0; % vertical velocity (m/s)
+VelocityX = accelerationX * 0.1 + InitialSpeed; % horixzontal velocity
+VelocityY = accelerationY * 0.1 + 0; % vertical velocity (m/s)
 %% intergrate conponents of velocity with respect to time to get displacement
 %starting position x=0 y=0.2
-displacementX = 0.5 * VelocityX * time + 0 % horizontal displacement
-displacementY = 0.5 * VelocityY * time + launchHeight % vertical displacement
+displacementX = VelocityX * 0.1 + 0; % horizontal displacement
+displacementY = VelocityY * 0.1 + launchHeight; % vertical displacement
 plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
     drawnow;
 %% repeat
-for k = 1:6
+for k = 1:15
     % update forces based new position
-    time = time + 0.25
-WinchLength = StartingWinchLength-launchSpeed*time;
+    time = time + 0.1
+WinchLength = StartingWinchLength-launchSpeed*time
 Tension = (Mass*launchSpeed^2)/WinchLength;
 winchangle = asind(displacementX/WinchLength);
-TensionX = Tension*(sin(winchangle));
-TensionY = -1*Tension*(cos(winchangle));
+TensionX = Tension*(sind(winchangle));
+TensionY = -1*Tension*(cosd(winchangle))
 % update L/D based on new climb angle
 CL = CL0+(lGrad/(1+(lGrad/(pi*aspectRatio*oswaldEff))))*(InitialChordAngle+ClimbAngle);
 CD = CD0 + CoeffI*CL^2;
@@ -62,21 +62,20 @@ ClimbAngle = asind(Tension/Weight-CD/CL);
 % Update forces based on new climb angle
 Drag = -1*0.5*AirDensity*launchSpeed^2*wingArea*CD;
 Lift = 0.5*AirDensity*launchSpeed^2*wingArea*CL;
-LiftX = -1*Lift*sin(ClimbAngle);
-LiftY = Lift*cos(ClimbAngle);
+LiftX = -1*Lift*sind(ClimbAngle);
+LiftY = Lift*cosd(ClimbAngle);
 Fx = TensionX+Drag+LiftX;      % horizontal force (N)
 Fy = LiftY+Weight+TensionY;      % vertical force (N)
 %% Calculate acceleration
-accelerationX = Fx / Mass  % horizontal acceleration (m/s^2)
-accelerationY = Fy / Mass % vertical acceleration (m/s^2)
+accelerationX = Fx / Mass;  % horizontal acceleration (m/s^2)
+accelerationY = Fy / Mass; % vertical acceleration (m/s^2)
 %% intergrate conponents of axceleraton with respect to time to get velocity
-VelocityX = accelerationX * time + VelocityX; % horixzontal velocity
-VelocityY = accelerationY * time + VelocityY; % vertical velocity (m/s)
+VelocityX = accelerationX * 0.1 + VelocityX; % horixzontal velocity
+VelocityY = accelerationY * 0.1 + VelocityY; % vertical velocity (m/s)
 %% intergrate conponents of velocity with respect to time to get displacement
 %starting position x=0 y=0.2
-displacementX = 0.5 * VelocityX * time + displacementX % horizontal displacement
-displacementY = 0.5 * VelocityX * time + displacementY % vertical displacement
-time = time + 0.25
+displacementX = VelocityX * 0.1 + displacementX; % horizontal displacement
+displacementY = VelocityX * 0.1 + displacementY; % vertical displacement
     plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
     drawnow;
 end
