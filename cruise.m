@@ -2,11 +2,7 @@
 % % This script uses variables from the project spreadsheet to predict the 
 % glide performance of the glider.
 %
-% It assumes:
-%   - steady, no-thrust glide at constant AoA,
-%   - no wind,
-%
-% The script:
+% The script does the following: 
 %   1) Uses AoA between 1 and 8 degrees to find the AoA that maximises
 %      horizontal distance from the launcher ("best case").
 %   2) Evaluates glide range, speed and trajectory at a more realistic
