@@ -42,8 +42,8 @@ VelocityX = accelerationX * time + InitialSpeed; % horixzontal velocity
 VelocityY = accelerationY * time + 0; % vertical velocity (m/s)
 %% intergrate conponents of velocity with respect to time to get displacement
 %starting position x=0 y=0.2
-displacementX = 0.5 * accelerationX * time^2 + 0 % horizontal displacement
-displacementY = 0.5 * accelerationY * time^2 + launchHeight % vertical displacement
+displacementX = 0.5 * VelocityX * time + 0 % horizontal displacement
+displacementY = 0.5 * VelocityY * time + launchHeight % vertical displacement
 plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
     drawnow;
 %% repeat
@@ -74,8 +74,8 @@ VelocityX = accelerationX * time + VelocityX; % horixzontal velocity
 VelocityY = accelerationY * time + VelocityY; % vertical velocity (m/s)
 %% intergrate conponents of velocity with respect to time to get displacement
 %starting position x=0 y=0.2
-displacementX = 0.5 * accelerationX * time^2 + displacementX % horizontal displacement
-displacementY = 0.5 * accelerationY * time^2 + displacementY % vertical displacement
+displacementX = 0.5 * VelocityX * time + displacementX % horizontal displacement
+displacementY = 0.5 * VelocityX * time + displacementY % vertical displacement
 time = time + 0.25
     plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
     drawnow;
