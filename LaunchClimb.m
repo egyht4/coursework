@@ -60,8 +60,8 @@ CL = CL0+(lGrad/(1+(lGrad/(pi*aspectRatio*oswaldEff))))*(InitialChordAngle+Climb
 CD = CD0 + CoeffI*CL^2;
 ClimbAngle = asind(Tension/Weight-CD/CL);
 % Update forces based on new climb angle
-Drag = -1*0.5*AirDensity*launchSpeed^2*wingArea*CD;
-Lift = 0.5*AirDensity*launchSpeed^2*wingArea*CL;
+Drag = -1*0.5*AirDensity*VelocityX^2*wingArea*CD;
+Lift = 0.5*AirDensity*VelocityX^2*wingArea*CL;
 LiftX = -1*Lift*sind(ClimbAngle);
 LiftY = Lift*cosd(ClimbAngle);
 Fx = TensionX+Drag+LiftX;      % horizontal force (N)
