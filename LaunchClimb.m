@@ -38,7 +38,7 @@ accelerationY = Fy / Mass; % vertical acceleration (m/s^2)
 %% intergrate conponents of axceleraton with respect to time to get velocity
 %starting velocity x=5 y=0
 time = 0;
-VelocityX = accelerationX * 0.1 + InitialSpeed; % horixzontal velocity
+VelocityX = accelerationX * 0.1 + launchSpeed; % horixzontal velocity
 VelocityY = accelerationY * 0.1 + 0; % vertical velocity (m/s)
 %% intergrate conponents of velocity with respect to time to get displacement
 %starting position x=0 y=0.2
@@ -53,8 +53,8 @@ for k = 1:15
 WinchLength = StartingWinchLength-launchSpeed*time
 Tension = (Mass*launchSpeed^2)/WinchLength;
 winchangle = asind(displacementX/WinchLength);
-TensionX = Tension*(sind(winchangle));
-TensionY = -1*Tension*(cosd(winchangle))
+TensionX = Tension*(sind(winchangle+InitialChordAngle));
+TensionY = -1*Tension*(cosd(winchangle+InitialChordAngle))
 % update L/D based on new climb angle
 CL = CL0+(lGrad/(1+(lGrad/(pi*aspectRatio*oswaldEff))))*(InitialChordAngle+ClimbAngle);
 CD = CD0 + CoeffI*CL^2;
