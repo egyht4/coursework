@@ -75,7 +75,7 @@ VelocityY = accelerationY * 0.1 + VelocityY; % vertical velocity (m/s)
 %% intergrate conponents of velocity with respect to time to get displacement
 %starting position x=0 y=0.2
 displacementX = VelocityX * 0.1 + displacementX; % horizontal displacement
-displacementY = VelocityX * 0.1 + displacementY; % vertical displacement
+displacementY = VelocityY * 0.1 + displacementY; % vertical displacement
     plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
     drawnow;
 end
