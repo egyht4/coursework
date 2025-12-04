@@ -22,7 +22,7 @@ g = 9.81;
 % variables from climb
 releaseHeight = 2.5;          
 releaseSpeed  = 5;          
-releaseDist   = 7.5;
+releaseDist   = 4.5;
 
 %% Glide parameters
 CL_0     = 0.29;       
