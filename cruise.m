@@ -1,9 +1,19 @@
 % Harry Toms - egyht4 
-% This script takes the variables calculated from our spreadsheet and
-% predicts a glide path, range and AOA. It predicts a "best case", by
-% iterating through the AOA between 1 and 8 degrees, and solves for the
-% best AOA and the range that will be achieved. It also then solves for a
-% more realistic AOA, which we assumed to be 5 degrees. 
+% % This script uses variables from the project spreadsheet to predict the 
+% glide performance of the glider.
+%
+% It assumes:
+%   - steady, no-thrust glide at constant AoA,
+%   - no wind,
+%
+% The script:
+%   1) Uses AoA between 1 and 8 degrees to find the AoA that maximises
+%      horizontal distance from the launcher ("best case").
+%   2) Evaluates glide range, speed and trajectory at a more realistic
+%      design AoA 
+%   3) Computes stall speed V_stall and V_min_drag 
+%   4) Plots the predicted glide path (height vs horizontal distance)
+
 %% Variables
 Mass = 0.11;
 wingArea = 0.1066667;
