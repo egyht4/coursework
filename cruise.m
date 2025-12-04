@@ -11,7 +11,7 @@
 %   4) Plots the predicted glide path (height vs horizontal distance)
 
 %% Variables
-Mass = 0.11;
+Mass = 0.92;
 wingArea = 0.1066667;
 aspectRatio = 6;
 oswaldEff = 0.95;
@@ -22,7 +22,7 @@ g = 9.81;
 % variables from climb
 releaseHeight = 2.5;          
 releaseSpeed  = 5;          
-releaseDist   = 7.5;
+releaseDist   = 4.5;
 
 %% Glide parameters
 CL_0     = 0.29;       
