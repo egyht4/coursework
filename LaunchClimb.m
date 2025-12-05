@@ -1,7 +1,7 @@
 %% Variables 
 Mass = 0.107; 
 wingArea = 0.1066667; 
-aspectRatio = 6; 
+aspectRatio = 9; 
 oswaldEff = 0.95; 
 launchSpeed = 5; 
 launchHeight = 0.2; 
@@ -33,7 +33,7 @@ Fy = Lift-Weight; % vertical force (N)
 
 %% make graph
 figure; hold on; grid on; axis equal;
-xlim([0 7]); ylim([0 2]);
+xlim([0 7]); ylim([0 5]);
 
 %% Calculate acceleration
 accelerationX = Fx / Mass;  % horizontal acceleration (m/s^2)
