@@ -11,7 +11,7 @@ time = 0;
 StartingWinchLength = 20; 
 WinchLength = StartingWinchLength-launchSpeed*time;
 AirDensity = 1.225; 
-InitialChordAngle = 7; 
+InitialChordAngle = 6; 
 lGrad = 0.08; 
 CL0 = 0.293; 
 CD0 = 0.04651; 
@@ -25,7 +25,7 @@ Drag = -1*0.5*AirDensity*launchSpeed^2*wingArea*CD;
 Weight = Mass*9.81;
 StartAngle = 0;
 ClimbAngle = asind(Tension/Weight-CD/CL);
-timeinterval = 0.1
+timeinterval = 0.1;
 
 %% resolve forces
 Fx = Tension+Drag;      % horizontal force (N)
