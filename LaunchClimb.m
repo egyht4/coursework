@@ -25,6 +25,7 @@ Drag = -1*0.5*AirDensity*launchSpeed^2*wingArea*CD;
 Weight = Mass*9.81;
 StartAngle = 0;
 ClimbAngle = asind(Tension/Weight-CD/CL);
+timeinterval = 0.1
 
 %% resolve forces
 Fx = Tension+Drag;      % horizontal force (N)
@@ -41,18 +42,18 @@ accelerationY = Fy / Mass; % vertical acceleration (m/s^2)
 %% intergrate conponents of axceleraton with respect to time to get velocity
 %starting velocity x=5 y=0
 time = 0;
-VelocityX = accelerationX * 0.1 + launchSpeed; % horixzontal velocity
-VelocityY = accelerationY * 0.1 + 0; % vertical velocity (m/s)
+VelocityX = accelerationX * timeinterval + launchSpeed; % horixzontal velocity
+VelocityY = accelerationY * timeinterval + 0; % vertical velocity (m/s)
 
 %% intergrate conponents of velocity with respect to time to get displacement
 %starting position x=0 y=0.2
-displacementX = VelocityX * 0.1 + 0; % horizontal displacement
-displacementY = VelocityY * 0.1 + launchHeight; % vertical displacement
+displacementX = VelocityX * timeinterval + 0; % horizontal displacement
+displacementY = VelocityY * timeinterval + launchHeight; % vertical displacement
 plot(displacementX, displacementY, '*', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
     drawnow;
 
 %% repeat
-for k = 1:15
+for k = 1:(1.5/timeinterval)
 
     % update forces based new position
     time = time + 0.1;
@@ -78,8 +79,8 @@ accelerationX = Fx / Mass;  % horizontal acceleration (m/s^2)
 accelerationY = Fy / Mass; % vertical acceleration (m/s^2)
 
 %% intergrate conponents of axceleraton with respect to time to get velocity
-VelocityX = accelerationX * 0.1 + VelocityX; % horixzontal velocity
-VelocityY = accelerationY * 0.1 + VelocityY; % vertical velocity (m/s)
+VelocityX = accelerationX * timeinterval + VelocityX; % horixzontal velocity
+VelocityY = accelerationY * timeinterval + VelocityY; % vertical velocity (m/s)
 
 %% intergrate conponents of velocity with respect to time to get displacement
 %starting position x=0 y=0.2
