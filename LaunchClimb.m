@@ -48,7 +48,7 @@ VelocityY = accelerationY * 0.1 + 0; % vertical velocity (m/s)
 %starting position x=0 y=0.2
 displacementX = VelocityX * 0.1 + 0; % horizontal displacement
 displacementY = VelocityY * 0.1 + launchHeight; % vertical displacement
-plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
+plot(displacementX, displacementY, '*', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
     drawnow;
 
 %% repeat
@@ -85,7 +85,7 @@ VelocityY = accelerationY * 0.1 + VelocityY; % vertical velocity (m/s)
 %starting position x=0 y=0.2
 displacementX = VelocityX * 0.1 + displacementX; % horizontal displacement
 displacementY = VelocityY * 0.1 + displacementY; % vertical displacement
-    plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
+    plot(displacementX, displacementY, '*', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
     drawnow;
     
 end
