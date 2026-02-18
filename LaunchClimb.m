@@ -26,7 +26,7 @@ steps = round(launchTime/dt);
 figure; hold on; grid on; axis equal;
 xlim([0 7]); ylim([0 2]);
 
-%% simulate two bounding cases without trim data
+%% simulate optimistic case without trim data
 params = struct('Mass',Mass,'wingArea',wingArea,'aspectRatio',aspectRatio, ...
     'oswaldEff',oswaldEff,'launchSpeed',launchSpeed,'launchHeight',launchHeight, ...
     'launchTime',launchTime,'StartingWinchLength',StartingWinchLength, ...
@@ -34,12 +34,18 @@ params = struct('Mass',Mass,'wingArea',wingArea,'aspectRatio',aspectRatio, ...
     'InitialChordAngle',InitialChordAngle,'CL0',CL0,'CD0',CD0, ...
     'CoeffI',CoeffI,'lGradEff',lGradEff,'Weight',Weight,'dt',dt,'steps',steps);
 
-traj_pitch = simulateTow(params, 'pitch');  % AoA = pitch - flight path angle
-traj_aoa   = simulateTow(params, 'aoa');    % AoA fixed to InitialChordAngle
+traj_aoa = simulateTow(params, 'aoa');    % AoA fixed to InitialChordAngle
+plot(traj_aoa.x, traj_aoa.y, 'o-', 'MarkerSize', 4, 'MarkerFaceColor', 'r', 'Color', 'r');
+legend('Constant AoA (optimistic)', 'Location', 'best');
 
-plot(traj_pitch.x, traj_pitch.y, 'o-', 'MarkerSize', 4, 'MarkerFaceColor', 'b', 'Color', 'b');
-plot(traj_aoa.x,   traj_aoa.y,   'o-', 'MarkerSize', 4, 'MarkerFaceColor', 'r', 'Color', 'r');
-legend('Pitch-based AoA (more conservative)', 'Constant AoA (optimistic)', 'Location', 'best');
+releaseX = traj_aoa.x(end);
+releaseY = traj_aoa.y(end);
+releaseV = traj_aoa.speed(end);
+fprintf('Release summary (optimistic AoA):\n');
+fprintf('  time           = %.2f s\n', launchTime);
+fprintf('  x distance      = %.2f m\n', releaseX);
+fprintf('  height          = %.2f m\n', releaseY);
+fprintf('  release speed   = %.2f m/s\n', releaseV);
 
 function traj = simulateTow(p, aoaMode)
     x = 0;
@@ -49,8 +55,14 @@ function traj = simulateTow(p, aoaMode)
     time = 0;
     traj.x = zeros(p.steps+1,1);
     traj.y = zeros(p.steps+1,1);
+    traj.Vx = zeros(p.steps+1,1);
+    traj.Vy = zeros(p.steps+1,1);
+    traj.speed = zeros(p.steps+1,1);
     traj.x(1) = x;
     traj.y(1) = y;
+    traj.Vx(1) = Vx;
+    traj.Vy(1) = Vy;
+    traj.speed(1) = sqrt(Vx^2 + Vy^2);
 
     for k = 1:p.steps
         time = time + p.dt;
@@ -109,5 +121,8 @@ function traj = simulateTow(p, aoaMode)
 
         traj.x(k+1) = x;
         traj.y(k+1) = y;
+        traj.Vx(k+1) = Vx;
+        traj.Vy(k+1) = Vy;
+        traj.speed(k+1) = sqrt(Vx^2 + Vy^2);
     end
 end

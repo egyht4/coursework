@@ -20,8 +20,8 @@ g = 9.81;
 
 
 % variables from climb
-releaseHeight = 0.83;          
-releaseSpeed  = 5;          
+releaseHeight = 0.53;          
+releaseSpeed  = 4.75;          
 releaseDist   = 7.5;
 
 %% Glide parameters
@@ -48,9 +48,11 @@ for i = 1:n
     CL_i = CL_0 + a_deg * alpha_i;
     CD_i = CD0 + k * (CL_i).^2;
     LD_i = CL_i / CD_i;
+    V_i = sqrt((2 * Mass * g) / (rho * wingArea * CL_i));
+    energyHeight_i = releaseHeight + max(0, (releaseSpeed^2 - V_i^2) / (2*g));
     
     % calculate glide range
-    glideRange_i = LD_i * releaseHeight;
+    glideRange_i = LD_i * energyHeight_i;
     totalRange_i = glideRange_i + releaseDist;
 
     if totalRange_i > bestRange
@@ -61,13 +63,16 @@ end
 
 fprintf('Best AoA           = %.2f deg\n', bestAlpha);
 fprintf('Max total range    = %.2f m\n', bestRange);
+fprintf('Release speed      = %.2f m/s\n', releaseSpeed);
 
 % Glide performance at best AOA
 CL_glide = CL_0 + a_deg * bestAlpha;
 CD_glide = CD0 + k * (CL_glide).^2;
 LD_glide = CL_glide / CD_glide;
+V_glide = sqrt((2 * Mass * g) / (rho * wingArea * CL_glide));
+energyHeight_glide = releaseHeight + max(0, (releaseSpeed^2 - V_glide^2) / (2*g));
 
-glideRange  = LD_glide * releaseHeight;
+glideRange  = LD_glide * energyHeight_glide;
 
 
 %% Glide performance for expected AOA
@@ -75,13 +80,13 @@ alpha_design_deg = 6;
 CL_design = CL_0 + a_deg * alpha_design_deg;
 CD_design = CD0 + k * (CL_design).^2;
 LD_design = CL_design / CD_design;
-
-glideRange_design = LD_design * releaseHeight;
-totalRange_design = releaseDist + glideRange_design;
-
-% Speed for this CL
 W = Mass * g;
 V_design = sqrt((2 * W) / (rho * wingArea * CL_design));
+energyHeight_design = releaseHeight + max(0, (releaseSpeed^2 - V_design^2) / (2*g));
+
+glideRange_design = LD_design * energyHeight_design;
+totalRange_design = releaseDist + glideRange_design;
+
 glideTime_design = glideRange_design / V_design;
 
 % Calculate v min drag and v stall
