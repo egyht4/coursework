@@ -11,26 +11,26 @@
 %   4) Plots the predicted glide path (height vs horizontal distance)
 
 %% Variables
-Mass = 0.107;
-wingArea = 0.1066667;
-aspectRatio = 6;
+Mass = 0.100;
+wingArea = 0.081;
+aspectRatio = 10;
 oswaldEff = 0.95;
 rho = 1.225;
 g = 9.81;
 
 
 % variables from climb
-releaseHeight = 1.5;          
-releaseSpeed  = 3.3;          
-releaseDist   = 6.0;
+releaseHeight = 0.83;          
+releaseSpeed  = 5;          
+releaseDist   = 7.5;
 
 %% Glide parameters
 CL_0     = 0.29;       
-CL_max = 0.927;      % from JavaFoil 
-a_deg   = 0.085;      % gradient of cl vs alpha (degrees)
+CL_max = 1.01;      % from JavaFoil 
+a_deg   = 0.094;      % gradient of cl vs alpha (degrees)
 a_rad   = a_deg * (180/pi);   % alpha in radians
 
-CD0_wing = 0.023;     % wing profile drag cl0
+CD0_wing = 0.02556;     % wing profile drag cl0
 CD0      = 2 * CD0_wing;  % whole-glider zero-lift drag
 
 k = 1 / (pi * oswaldEff * aspectRatio);  % induced drag factor (k)
@@ -71,7 +71,7 @@ glideRange  = LD_glide * releaseHeight;
 
 
 %% Glide performance for expected AOA
-alpha_design_deg = 5;
+alpha_design_deg = 6;
 CL_design = CL_0 + a_deg * alpha_design_deg;
 CD_design = CD0 + k * (CL_design).^2;
 LD_design = CL_design / CD_design;

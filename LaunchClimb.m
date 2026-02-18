@@ -1,5 +1,5 @@
 %% Variables 
-Mass = 0.107; 
+Mass = 0.100; 
 wingArea = 0.081; 
 aspectRatio = 10; 
 oswaldEff = 0.95; 
@@ -9,83 +9,105 @@ launchTime = 1.5;
 launchDist = 3; 
 time = 0;
 StartingWinchLength = 20; 
-WinchLength = StartingWinchLength-launchSpeed*time;
+winchX = StartingWinchLength;   % winch is ahead of glider by StartingWinchLength
+winchY = launchHeight;          % same height as launch interface
 AirDensity = 1.225; 
 InitialChordAngle = 7; 
 lGrad = 0.08; 
 CL0 = 0.293; 
 CD0 = 0.02556*2; 
 CoeffI = 1/(oswaldEff*pi*aspectRatio);
-% calculate tension (h and v components) 
-Tension = (Mass*launchSpeed^2)/WinchLength;
-CL = 0.88 ; % CL0+(lGrad/(1+(lGrad/(pi*aspectRatio*oswaldEff))))*InitialChordAngle 
-Lift = 0.5*AirDensity*launchSpeed^2*wingArea*CL;
-CD = CD0 + CoeffI*CL^2; 
-Drag = -1*0.5*AirDensity*launchSpeed^2*wingArea*CD;
+lGradEff = lGrad/(1+(lGrad/(pi*aspectRatio*oswaldEff)));
 Weight = Mass*9.81;
-StartAngle = 0;
-ClimbAngle = asind(Tension/Weight-CD/CL);
-
-%% resolve forces
-Fx = Tension+Drag;      % horizontal force (N)
-Fy = Lift-Weight; % vertical force (N)
+dt = 0.1;
+steps = round(launchTime/dt);
 
 %% make graph
 figure; hold on; grid on; axis equal;
 xlim([0 7]); ylim([0 2]);
 
-%% Calculate acceleration
-accelerationX = Fx / Mass;  % horizontal acceleration (m/s^2)
-accelerationY = Fy / Mass; % vertical acceleration (m/s^2)
+%% simulate two bounding cases without trim data
+params = struct('Mass',Mass,'wingArea',wingArea,'aspectRatio',aspectRatio, ...
+    'oswaldEff',oswaldEff,'launchSpeed',launchSpeed,'launchHeight',launchHeight, ...
+    'launchTime',launchTime,'StartingWinchLength',StartingWinchLength, ...
+    'winchX',winchX,'winchY',winchY,'AirDensity',AirDensity, ...
+    'InitialChordAngle',InitialChordAngle,'CL0',CL0,'CD0',CD0, ...
+    'CoeffI',CoeffI,'lGradEff',lGradEff,'Weight',Weight,'dt',dt,'steps',steps);
 
-%% intergrate conponents of axceleraton with respect to time to get velocity
-%starting velocity x=5 y=0
-time = 0;
-VelocityX = accelerationX * 0.1 + launchSpeed; % horixzontal velocity
-VelocityY = accelerationY * 0.1 + 0; % vertical velocity (m/s)
+traj_pitch = simulateTow(params, 'pitch');  % AoA = pitch - flight path angle
+traj_aoa   = simulateTow(params, 'aoa');    % AoA fixed to InitialChordAngle
 
-%% intergrate conponents of velocity with respect to time to get displacement
-%starting position x=0 y=0.2
-displacementX = VelocityX * 0.1 + 0; % horizontal displacement
-displacementY = VelocityY * 0.1 + launchHeight; % vertical displacement
-plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
-    drawnow;
+plot(traj_pitch.x, traj_pitch.y, 'o-', 'MarkerSize', 4, 'MarkerFaceColor', 'b', 'Color', 'b');
+plot(traj_aoa.x,   traj_aoa.y,   'o-', 'MarkerSize', 4, 'MarkerFaceColor', 'r', 'Color', 'r');
+legend('Pitch-based AoA (more conservative)', 'Constant AoA (optimistic)', 'Location', 'best');
 
-%% repeat
-for k = 1:15
+function traj = simulateTow(p, aoaMode)
+    x = 0;
+    y = p.launchHeight;
+    Vx = p.launchSpeed;
+    Vy = 0;
+    time = 0;
+    traj.x = zeros(p.steps+1,1);
+    traj.y = zeros(p.steps+1,1);
+    traj.x(1) = x;
+    traj.y(1) = y;
 
-    % update forces based new position
-    time = time + 0.1;
-WinchLength = StartingWinchLength-launchSpeed*time;
-Tension = (Mass*launchSpeed^2)/WinchLength;
-winchangle = asind(displacementX/WinchLength);
-    TensionX = Tension*(cosd(winchangle+InitialChordAngle));
-    TensionY = Tension*(sind(winchangle+InitialChordAngle));
-% update L/D based on new climb angle
-CL = CL0+(lGrad/(1+(lGrad/(pi*aspectRatio*oswaldEff))))*(InitialChordAngle+ClimbAngle);
-CD = CD0 + CoeffI*CL^2;
-ClimbAngle = asind(Tension/Weight-CD/CL);
-% Update forces based on new climb angle
-Drag = -1*0.5*AirDensity*VelocityX^2*wingArea*CD;
-Lift = 0.5*AirDensity*VelocityX^2*wingArea*CL;
-LiftX = -1*Lift*sind(ClimbAngle);
-LiftY = Lift*cosd(ClimbAngle);
-Fx = TensionX+Drag+LiftX  ;    % horizontal force (N)
-Fy = LiftY-Weight-TensionY ;     % vertical force (N)
+    for k = 1:p.steps
+        time = time + p.dt;
+        WinchLength = p.StartingWinchLength - p.launchSpeed*time;
+        if WinchLength <= 0
+            Tension = 0;
+        else
+            Tension = (p.Mass*p.launchSpeed^2)/WinchLength;
+        end
 
-%% Calculate acceleration
-accelerationX = Fx / Mass;  % horizontal acceleration (m/s^2)
-accelerationY = Fy / Mass; % vertical acceleration (m/s^2)
+        cableDx = p.winchX - x;
+        cableDy = p.winchY - y;
+        cableDist = sqrt(cableDx^2 + cableDy^2);
+        if cableDist > 0
+            cableUx = cableDx / cableDist;
+            cableUy = cableDy / cableDist;
+        else
+            cableUx = 0;
+            cableUy = 0;
+        end
+        TensionX = Tension * cableUx;
+        TensionY = Tension * cableUy;
 
-%% intergrate conponents of axceleraton with respect to time to get velocity
-VelocityX = accelerationX * 0.1 + VelocityX; % horixzontal velocity
-VelocityY = accelerationY * 0.1 + VelocityY; % vertical velocity (m/s)
+        speed = sqrt(Vx^2 + Vy^2);
+        if speed <= 0
+            speed = 1e-6;
+        end
+        if strcmp(aoaMode,'aoa')
+            AoA = p.InitialChordAngle;
+        else
+            ClimbAngle = atan2d(Vy, Vx);
+            AoA = p.InitialChordAngle - ClimbAngle;
+        end
+        CL = p.CL0 + p.lGradEff * AoA;
+        CD = p.CD0 + p.CoeffI * CL^2;
 
-%% intergrate conponents of velocity with respect to time to get displacement
-%starting position x=0 y=0.2
-displacementX = VelocityX * 0.1 + displacementX; % horizontal displacement
-displacementY = VelocityY * 0.1 + displacementY; % vertical displacement
-    plot(displacementX, displacementY, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
-    drawnow;
-    
+        Drag = -0.5*p.AirDensity*speed^2*p.wingArea*CD;
+        Lift = 0.5*p.AirDensity*speed^2*p.wingArea*CL;
+        velUx = Vx / speed;
+        velUy = Vy / speed;
+        DragX = Drag * velUx;
+        DragY = Drag * velUy;
+        LiftX = -Lift * velUy;
+        LiftY = Lift * velUx;
+
+        Fx = TensionX + DragX + LiftX;
+        Fy = LiftY - p.Weight + TensionY + DragY;
+
+        ax = Fx / p.Mass;
+        ay = Fy / p.Mass;
+
+        Vx = Vx + ax * p.dt;
+        Vy = Vy + ay * p.dt;
+        x = x + Vx * p.dt;
+        y = y + Vy * p.dt;
+
+        traj.x(k+1) = x;
+        traj.y(k+1) = y;
+    end
 end
