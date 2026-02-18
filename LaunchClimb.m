@@ -14,7 +14,7 @@ AirDensity = 1.225;
 InitialChordAngle = 7; 
 lGrad = 0.08; 
 CL0 = 0.293; 
-CD0 = 0.02556; 
+CD0 = 0.02556*2; 
 CoeffI = 1/(oswaldEff*pi*aspectRatio);
 % calculate tension (h and v components) 
 Tension = (Mass*launchSpeed^2)/WinchLength;
@@ -59,8 +59,8 @@ for k = 1:15
 WinchLength = StartingWinchLength-launchSpeed*time;
 Tension = (Mass*launchSpeed^2)/WinchLength;
 winchangle = asind(displacementX/WinchLength);
-TensionX = Tension*(sind(winchangle+InitialChordAngle));
-TensionY = Tension*(cosd(winchangle+InitialChordAngle));
+    TensionX = Tension*(cosd(winchangle+InitialChordAngle));
+    TensionY = Tension*(sind(winchangle+InitialChordAngle));
 % update L/D based on new climb angle
 CL = CL0+(lGrad/(1+(lGrad/(pi*aspectRatio*oswaldEff))))*(InitialChordAngle+ClimbAngle);
 CD = CD0 + CoeffI*CL^2;
