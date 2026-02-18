@@ -1,7 +1,7 @@
 %% Variables 
 Mass = 0.107; 
-wingArea = 0.1066667; 
-aspectRatio = 6; 
+wingArea = 0.081; 
+aspectRatio = 10; 
 oswaldEff = 0.95; 
 launchSpeed = 5; 
 launchHeight = 0.2; 
