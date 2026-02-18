@@ -14,7 +14,7 @@ AirDensity = 1.225;
 InitialChordAngle = 7; 
 lGrad = 0.08; 
 CL0 = 0.293; 
-CD0 = 0.04651; 
+CD0 = 0.02556; 
 CoeffI = 1/(oswaldEff*pi*aspectRatio);
 % calculate tension (h and v components) 
 Tension = (Mass*launchSpeed^2)/WinchLength;
