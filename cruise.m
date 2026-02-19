@@ -20,7 +20,7 @@ g = 9.81;
 
 
 % variables from climb
-releaseHeight = 0.53;          
+releaseHeight = 0.83;          
 releaseSpeed  = 4.75;          
 releaseDist   = 7.5;
 
@@ -115,5 +115,5 @@ figure;
 plot(x_points, h_points, '-o');   % straight line + markers
 xlabel('Horizontal distance x [m]');
 ylabel('Height h [m]');
-title('Glide trajectory (from winch release to landing)');
+%title('Glide trajectory (from winch release to landing)');
 grid on;

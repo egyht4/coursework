@@ -25,6 +25,8 @@ steps = round(launchTime/dt);
 %% make graph
 figure; hold on; grid on; axis equal;
 xlim([0 7]); ylim([0 2]);
+xlabel('Horizontal distance (m)');
+ylabel('Vertical height (m)');
 
 %% simulate optimistic case without trim data
 params = struct('Mass',Mass,'wingArea',wingArea,'aspectRatio',aspectRatio, ...
